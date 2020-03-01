@@ -1,7 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e95a5c18-ad26-4dfa-9568-ffdd7daf5152" name="Default Changelist" comment="" />
+    <list default="true" id="e95a5c18-ad26-4dfa-9568-ffdd7daf5152" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JarProcessTestApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/JarProcessTestApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JarProcessTestApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/JarProcessTestApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/beanbags.jar" beforeDir="false" afterPath="$PROJECT_DIR$/beanbags.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Beanbag.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Beanbag.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Store.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Store.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/beanbags/Beanbag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Beanbag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/beanbags/Store.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Store.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -24,10 +34,14 @@
     <expand />
     <select />
   </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
   <component name="ProjectCodeStyleSettingsMigration">
     <option name="version" value="1" />
   </component>
   <component name="ProjectId" id="1XyiCs0OFr1kWkKGAREq4SEsQwT" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
@@ -35,6 +49,7 @@
   </component>
   <component name="PropertiesComponent">
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
     <property name="aspect.path.notification.shown" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
@@ -71,7 +86,7 @@
       <workItem from="1582024611824" duration="170000" />
       <workItem from="1582037246461" duration="329000" />
       <workItem from="1582986421573" duration="644000" />
-      <workItem from="1582987112427" duration="14020000" />
+      <workItem from="1582987112427" duration="20611000" />
     </task>
     <servers />
   </component>
@@ -87,9 +102,17 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="689" y="421" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1582024645149" />
+    <state x="379" y="127" key="CommitChangelistDialog2" timestamp="1583085074451">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="379" y="127" key="CommitChangelistDialog2/0.0.1680.1050@0.0.1680.1050" timestamp="1583085074451" />
     <state x="517" y="357" key="com.intellij.ide.util.TipDialog" timestamp="1582986421132">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="517" y="357" key="com.intellij.ide.util.TipDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1582986421132" />
+    <state x="623" y="449" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1583092006169">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="623" y="449" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2/0.0.1680.1050@0.0.1680.1050" timestamp="1583092006169" />
   </component>
 </project>

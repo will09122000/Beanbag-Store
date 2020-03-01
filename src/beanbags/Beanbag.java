@@ -23,12 +23,20 @@ public class Beanbag {
         this.reserved = reserved;
     }
 
-    public String getId(){
-        return id;
-    }
-
     public int getNum(){
         return num;
+    }
+
+    public String getManufacturer(){
+        return manufacturer;
+    }
+
+    public String getName(){
+        return name;
+    }
+
+    public String getId(){
+        return id;
     }
 
     public int getReserved(){
