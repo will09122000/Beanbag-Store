@@ -39,6 +39,10 @@ public class Beanbag {
         return id;
     }
 
+    public int getPrice(){
+        return price;
+    }
+
     public int getReserved(){
         return reserved;
     }

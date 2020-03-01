@@ -53,6 +53,24 @@ public class Store implements BeanBagStore {
         }
     }
 
+    public boolean checkIllegalNumberOfBeanBagsSoldException(int num) {
+        // If the number of beanbags is less than one, throw an exception.
+        if (num < 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public boolean checkInvalidPriceException(int price) {
+        // If the price is less than one, throw an exception.
+        if (price < 1) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
     public void addBeanBags(int num, String manufacturer, String name,
     String id, short year, byte month)
             throws IllegalNumberOfBeanBagsAddedException, BeanBagMismatchException,
@@ -85,7 +103,24 @@ public class Store implements BeanBagStore {
             throws IllegalNumberOfBeanBagsAddedException, BeanBagMismatchException,
             IllegalIDException, InvalidMonthException
     {
+        // Create a new beanbag object with the given parameters.
         Beanbag beanbag = new Beanbag(num, manufacturer, name, id, year, month, information);
+
+        // Check exceptions.
+        if (checkIllegalNumberOfBeanBagsAddedException(num)) {
+            throw new IllegalNumberOfBeanBagsAddedException();
+        }
+        if (checkBeanBagMismatchException(num, manufacturer, name, id)) {
+            throw new BeanBagMismatchException();
+        }
+        if (checkIllegalIDException(id)) {
+            throw new IllegalIDException();
+        }
+        if (checkInvalidMonthException(month)) {
+            throw new InvalidMonthException();
+        }
+
+        // If no exceptions thrown, add beanbag object to stock array.
         stock.add(beanbag);
      }
 
@@ -93,13 +128,25 @@ public class Store implements BeanBagStore {
     public void setBeanBagPrice(String id, int priceInPence)
             throws InvalidPriceException, BeanBagIDNotRecognisedException, IllegalIDException
     {
+        // Check exceptions.
+        if (checkIllegalIDException(id)) {
+            throw new IllegalIDException();
+        }
+        if (checkcheckInvalidPriceException(priceInPence)) {
+            throw new checkInvalidPriceException();
+        }
+
+        // Iterate through stock until the beanbag object with a matching id is found.
         for (int i = 0; i < stock.size(); i++) {
             Beanbag stockItem = ((Beanbag) stock.get(i));
             if (stockItem.getId() == id) {
                 stockItem.setPrice(priceInPence);
-            } else if (i + 1 == stock.size()) {
+            }
+            // If the id was not found, raise an exception.
+            else if (i + 1 == stock.size()) {
                 throw new BeanBagIDNotRecognisedException();
             }
+            // Replace beanbag object with the update version including the price attribute.
             stock.replace(stockItem, i);
         }
     }
@@ -110,15 +157,42 @@ public class Store implements BeanBagStore {
             IllegalNumberOfBeanBagsSoldException, PriceNotSetException,
             BeanBagIDNotRecognisedException, IllegalIDException
     {
+        // Check exceptions.
+        if (checkIllegalIDException(id)) {
+            throw new IllegalIDException();
+        }
+        if (checkIllegalNumberOfBeanBagsSoldException(id)) {
+            throw new IllegalNumberOfBeanBagsSoldException();
+        }
+
+        // Iterate through stock until the beanbag object with a matching id is found.
         for (int i = 0; i < stock.size(); i++) {
             Beanbag stockItem = ((Beanbag) stock.get(i));
             if (stockItem.getId() == id) {
-                if (stockItem.getNum() - num == 0) {
-                    stock.remove(i);
-                } else {
-                    stockItem.setNum(stockItem.getNum() - num);
-                    stock.replace(stockItem, i);
+                // If the stock is empty, raise an exception.
+                if (stockItem.getNum() == 0) {
+                    throw new BeanBagNotInStockException();
                 }
+                // If there is enough stock available, change the stock that is left and
+                // update the beanbag object
+                else if (stockItem.getNum() - stockItem.getReserved() - num > 0) {
+                    if (stockItem.getPrice() != null) {
+                        stockItem.setNum(stockItem.getNum() - num);
+                        stock.replace(stockItem, i);
+                    }
+                    // If the price has not been set yet, raise an exception.
+                    else {
+                        throw new PriceNotSetException();
+                    }
+                }
+                // If stock is greater than zero but not enough to sell, raise an exception.
+                else {
+                    throw new InsufficientStockException();
+                }
+            }
+            // If the id was not found, raise an exception.
+            else if (i + 1 == stock.size()) {
+                throw new BeanBagIDNotRecognisedException();
             }
         }
     }

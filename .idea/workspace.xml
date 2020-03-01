@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="e95a5c18-ad26-4dfa-9568-ffdd7daf5152" name="Default Changelist" comment="" />
+    <list default="true" id="e95a5c18-ad26-4dfa-9568-ffdd7daf5152" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/beanbags/Beanbag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Beanbag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/beanbags/Store.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Store.java" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -76,7 +80,7 @@
       <workItem from="1582024611824" duration="170000" />
       <workItem from="1582037246461" duration="329000" />
       <workItem from="1582986421573" duration="644000" />
-      <workItem from="1582987112427" duration="20870000" />
+      <workItem from="1582987112427" duration="24093000" />
     </task>
     <task id="LOCAL-00001" summary="Added exceptions">
       <created>1583092036426</created>
