@@ -1,6 +1,8 @@
 package beanbags;
+import java.io.Serializable;
 
-public class Reserve {
+public class Reserve implements Serializable
+{
     private int reservationNum;
     private String id;
     private int num;

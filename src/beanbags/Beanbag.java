@@ -1,6 +1,8 @@
 package beanbags;
+import java.io.Serializable;
 
-public class Beanbag {
+public class Beanbag implements Serializable
+{
     private int num;
     private String manufacturer;
     private String name;

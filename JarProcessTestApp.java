@@ -1,4 +1,5 @@
 import beanbags.*;
+import java.io.IOException;
 
 /**
  * Please follow instructions in the ECM1410_CA_jar_walkthrough
@@ -18,7 +19,8 @@ public class JarProcessTestApp {
             throws BeanBagIDNotRecognisedException, BeanBagMismatchException, BeanBagNotInStockException,
             IllegalIDException, IllegalNumberOfBeanBagsAddedException, IllegalNumberOfBeanBagsReservedException,
             IllegalNumberOfBeanBagsSoldException, InsufficientStockException, InvalidMonthException,
-            InvalidPriceException, PriceNotSetException, ReservationNumberNotRecognisedException
+            InvalidPriceException, PriceNotSetException, ReservationNumberNotRecognisedException, IOException,
+            ClassNotFoundException
 
     {
         Store store = new Store();
@@ -35,6 +37,9 @@ public class JarProcessTestApp {
         store.sellBeanBags(5, "12345678");
         int test = store.reserveBeanBags(4, "12345678");
         store.unreserveBeanBags(1);
+
+        store.saveStoreContents("text_file");
+        store.loadStoreContents("text_file");
 
     }
 }

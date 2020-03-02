@@ -2,8 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="e95a5c18-ad26-4dfa-9568-ffdd7daf5152" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/text_file.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JarProcessTestApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/JarProcessTestApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JarProcessTestApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/JarProcessTestApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/beanbags.jar" beforeDir="false" afterPath="$PROJECT_DIR$/beanbags.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Beanbag.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Beanbag.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Reserve.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Reserve.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Store.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Store.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/beanbags/Beanbag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Beanbag.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/beanbags/Reserve.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Reserve.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/beanbags/Store.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Store.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -35,13 +43,16 @@
     <option name="version" value="1" />
   </component>
   <component name="ProjectId" id="1XyiCs0OFr1kWkKGAREq4SEsQwT" />
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="2" id="Add" />
+  </component>
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showExcludedFiles" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
   <component name="PropertiesComponent">
+    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="SHARE_PROJECT_CONFIGURATION_FILES" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
@@ -80,7 +91,7 @@
       <workItem from="1582024611824" duration="170000" />
       <workItem from="1582037246461" duration="329000" />
       <workItem from="1582986421573" duration="644000" />
-      <workItem from="1582987112427" duration="24093000" />
+      <workItem from="1582987112427" duration="32827000" />
     </task>
     <task id="LOCAL-00001" summary="Added exceptions">
       <created>1583092036426</created>
@@ -96,6 +107,7 @@
     <option name="version" value="1" />
   </component>
   <component name="VcsManagerConfiguration">
+    <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Added exceptions" />
     <option name="LAST_COMMIT_MESSAGE" value="Added exceptions" />
   </component>
