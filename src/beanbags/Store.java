@@ -13,6 +13,16 @@ public class Store implements BeanBagStore {
 
     private ObjectArrayList stock = new ObjectArrayList();
     private ObjectArrayList reservations = new ObjectArrayList();
+    private ObjectArrayList sold = new ObjectArrayList();
+
+
+    public void setStock(ObjectArrayList stock){
+        this.stock = stock;
+    }
+
+    public void setReservations(ObjectArrayList reservations){
+        this.reservations = reservations;
+    }
 
 
     public boolean checkValidQuantityException(int number) {
@@ -166,10 +176,20 @@ public class Store implements BeanBagStore {
                 if (stockItem.getNum() == 0) {
                     throw new BeanBagNotInStockException();
                 }
-                // If there is enough stock available, change the stock that is left and
-                // update the beanbag object
+                // If there is enough stock available, update the sold array and update the quantity of stock that is
+                // left.
                 else if (stockItem.getNum() - stockItem.getReserved() - num > 0) {
                     if (stockItem.getPrice() != 0) {
+                        for (int j = 0; j < sold.size(); j++) {
+                            Beanbag soldItem = ((Beanbag) sold.get(i));
+                            if (soldItem.getId() == stockItem.getId()) {
+                                soldItem.setNum(soldItem.getNum() + stockItem.getNum());
+                                sold.replace(soldItem, j);
+                            }
+                            else {
+                                sold.add(soldItem);
+                            }
+                        }
                         stockItem.setNum(stockItem.getNum() - num);
                         stock.replace(stockItem, i);
                     }
@@ -275,14 +295,26 @@ public class Store implements BeanBagStore {
         for (int i = 0; i < reservations.size(); i++) {
             Reserve reservation = ((Reserve) reservations.get(i));
             // If the reservation is found, loop through the stock to find the stock with the matching id to the
-            // reservation. If found, correct the number of beanbags reserved and remove the reservation from the
-            // array of reservations. Finally, break from the find reservation loop.
+            // reservation.
             if (reservation.getReservationNum() == reservationNumber) {
                 for (int j = 0; j < stock.size(); j++) {
                     Beanbag stockItem = ((Beanbag) stock.get(j));
+                    // If found, update the sold array, correct the number of beanbags reserved and remove the
+                    // reservation from the array of reservations. Finally, break from the find reservation loop.
                     if (stockItem.getId() == reservation.getId()) {
+                        for (int k = 0; k < sold.size(); k++) {
+                            Beanbag soldItem = ((Beanbag) sold.get(i));
+                            if (soldItem.getId() == stockItem.getId()) {
+                                soldItem.setNum(soldItem.getNum() + stockItem.getNum());
+                                sold.replace(soldItem, k);
+                            }
+                            else {
+                                sold.add(soldItem);
+                            }
+                        }
                         stockItem.setReserved(stockItem.getReserved() - reservation.getNum());
                         reservations.remove(i);
+                        sold.add(stockItem);
                         break;
                     }
                 }
@@ -365,25 +397,47 @@ public class Store implements BeanBagStore {
             throws IOException, ClassNotFoundException
     {
         String fileName = filename + ".txt";
-        FileInputStream textFile = new FileInputStream(new File(fileName));
-        ObjectInputStream oi = new ObjectInputStream(textFile);
+        try {
+            FileInputStream textFile = new FileInputStream(new File(fileName));
+            ObjectInputStream oi = new ObjectInputStream(textFile);
 
-        ObjectArrayList stock = (ObjectArrayList) oi.readObject();
-        ObjectArrayList reservations = (ObjectArrayList) oi.readObject();
-        System.out.println(stock);
-        System.out.println(reservations);
+            ObjectArrayList stock = (ObjectArrayList) oi.readObject();
+            ObjectArrayList reservations = (ObjectArrayList) oi.readObject();
+            setStock(stock);
+            setReservations(reservations);
+        }
+        catch(IOException e) {
+            throw new IOException();
+        }
+        catch(ClassNotFoundException e) {
+            throw new ClassNotFoundException();
+        }
     }
 
 
     public int getNumberOfDifferentBeanBagsInStock()
     {
-        return 0;
+        int totalDiffStock = 0;
+        // Iterate through the entire stock incrementing 'totalDiffStock' by one if the stock item contains a level of
+        // stock greater than zero.
+        for (int i = 0; i < stock.size(); i++) {
+            Beanbag stockItem = ((Beanbag) stock.get(i));
+            if (stockItem.getNum() > 0)
+                totalDiffStock += 1;
+        }
+        return totalDiffStock;
     }
 
 
     public int getNumberOfSoldBeanBags()
     {
-        return 0;
+        int totalSold = 0;
+        // Iterate through the entire sold array adding the number of beanbags in each sold object to 'totalSold'.
+        for (int i = 0; i < sold.size(); i++) {
+            Beanbag stockItem = ((Beanbag) stock.get(i));
+            totalSold += stockItem.getNum();
+        }
+        return totalSold;
     }
 
 
