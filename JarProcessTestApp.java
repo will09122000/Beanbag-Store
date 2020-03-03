@@ -27,7 +27,7 @@ public class JarProcessTestApp {
 
         short year = 2020;
         byte month = 01;
-        store.addBeanBags(50, "Will's Beanbag maker", "Comfy beanbag", "12345678", year, month);
+        store.addBeanBags(50, "Will's Beanbag maker", "Comfy beanbag", "12345678", year, month, "INFORAMTTION");
 
         System.out.println("Store instance successfully made, with "
                 + store.beanBagsInStock()
@@ -42,6 +42,7 @@ public class JarProcessTestApp {
         //store.loadStoreContents("text_file");
 
         store.getNumberOfDifferentBeanBagsInStock();
-        System.out.println(store.getNumberOfSoldBeanBags());
+        System.out.println(store.getBeanBagDetails("12345678"));
+
     }
 }

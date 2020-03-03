@@ -6,9 +6,10 @@
       <change beforePath="$PROJECT_DIR$/JarProcessTestApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/JarProcessTestApp.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/JarProcessTestApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/JarProcessTestApp.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/beanbags.jar" beforeDir="false" afterPath="$PROJECT_DIR$/beanbags.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Beanbag.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Beanbag.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/beanbags/Store.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Store.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/beanbags/Beanbag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Beanbag.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/beanbags/Store.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Store.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/text_file.txt" beforeDir="false" afterPath="$PROJECT_DIR$/text_file.txt" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -87,7 +88,8 @@
       <workItem from="1582024611824" duration="170000" />
       <workItem from="1582037246461" duration="329000" />
       <workItem from="1582986421573" duration="644000" />
-      <workItem from="1582987112427" duration="36949000" />
+      <workItem from="1582987112427" duration="37108000" />
+      <workItem from="1583178358664" duration="5384000" />
     </task>
     <task id="LOCAL-00001" summary="Added exceptions">
       <created>1583092036426</created>
@@ -120,6 +122,10 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="689" y="421" key="#com.intellij.ide.util.projectWizard.JdkChooserPanel.MyDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1582024645149" />
+    <state x="528" y="268" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog" timestamp="1583178293056">
+      <screen x="0" y="0" width="1680" height="1050" />
+    </state>
+    <state x="528" y="268" key="#com.intellij.openapi.updateSettings.impl.PluginUpdateInfoDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1583178293056" />
     <state x="379" y="127" key="CommitChangelistDialog2" timestamp="1583092036197">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
@@ -128,10 +134,10 @@
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
     <state x="440" y="265" key="Vcs.Push.Dialog.v2/0.0.1680.1050@0.0.1680.1050" timestamp="1583092040510" />
-    <state x="517" y="357" key="com.intellij.ide.util.TipDialog" timestamp="1582986421132">
+    <state x="517" y="357" key="com.intellij.ide.util.TipDialog" timestamp="1583178358902">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>
-    <state x="517" y="357" key="com.intellij.ide.util.TipDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1582986421132" />
+    <state x="517" y="357" key="com.intellij.ide.util.TipDialog/0.0.1680.1050@0.0.1680.1050" timestamp="1583178358902" />
     <state x="623" y="449" key="com.intellij.openapi.vcs.update.UpdateOrStatusOptionsDialogupdate-v2" timestamp="1583092006169">
       <screen x="0" y="0" width="1680" height="1050" />
     </state>

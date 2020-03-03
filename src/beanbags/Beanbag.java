@@ -21,6 +21,10 @@ public class Beanbag implements Serializable
         this.num = num;
     }
 
+    public void setId(String id){
+        this.id = id;
+    }
+
     public void setReserved(int reserved){
         this.reserved = reserved;
     }
@@ -39,6 +43,10 @@ public class Beanbag implements Serializable
 
     public String getId(){
         return id;
+    }
+
+    public String getInformation(){
+        return information;
     }
 
     public int getPrice(){

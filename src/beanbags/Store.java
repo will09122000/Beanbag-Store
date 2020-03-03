@@ -24,6 +24,10 @@ public class Store implements BeanBagStore {
         this.reservations = reservations;
     }
 
+    public void setSold(ObjectArrayList sold){
+        this.sold = sold;
+    }
+
 
     public boolean checkValidQuantityException(int number) {
         // Used for multiple exception checks as they all check the same thing just the meaning of the
@@ -140,17 +144,22 @@ public class Store implements BeanBagStore {
         }
 
         // Iterate through stock until the beanbag object with a matching id is found.
-        for (int i = 0; i < stock.size(); i++) {
-            Beanbag stockItem = ((Beanbag) stock.get(i));
-            if (stockItem.getId() == id) {
-                stockItem.setPrice(priceInPence);
+        if (stock.size() > 0) {
+            for (int i = 0; i < stock.size(); i++) {
+                Beanbag stockItem = ((Beanbag) stock.get(i));
+                if (stockItem.getId() == id) {
+                    stockItem.setPrice(priceInPence);
+                }
+                // If the id was not found, raise an exception.
+                else if (i + 1 == stock.size()) {
+                    throw new BeanBagIDNotRecognisedException();
+                }
+                // Replace beanbag object with the update version including the price attribute.
+                stock.replace(stockItem, i);
             }
-            // If the id was not found, raise an exception.
-            else if (i + 1 == stock.size()) {
-                throw new BeanBagIDNotRecognisedException();
-            }
-            // Replace beanbag object with the update version including the price attribute.
-            stock.replace(stockItem, i);
+        }
+        else {
+            throw new BeanBagIDNotRecognisedException();
         }
     }
 
@@ -169,44 +178,50 @@ public class Store implements BeanBagStore {
         }
 
         // Iterate through stock until the beanbag object with a matching id is found.
-        for (int i = 0; i < stock.size(); i++) {
-            Beanbag stockItem = ((Beanbag) stock.get(i));
-            if (stockItem.getId() == id) {
-                // If the stock is empty, raise an exception.
-                if (stockItem.getNum() == 0) {
-                    throw new BeanBagNotInStockException();
-                }
-                // If there is enough stock available, update the sold array and update the quantity of stock that is
-                // left.
-                else if (stockItem.getNum() - stockItem.getReserved() - num > 0) {
-                    if (stockItem.getPrice() != 0) {
-                        for (int j = 0; j < sold.size(); j++) {
-                            Beanbag soldItem = ((Beanbag) sold.get(i));
-                            if (soldItem.getId() == stockItem.getId()) {
-                                soldItem.setNum(soldItem.getNum() + stockItem.getNum());
-                                sold.replace(soldItem, j);
+        if (stock.size() > 0) {
+            for (int i = 0; i < stock.size(); i++) {
+                Beanbag stockItem = ((Beanbag) stock.get(i));
+                if (stockItem.getId() == id) {
+                    // If the stock is empty, raise an exception.
+                    if (stockItem.getNum() == 0) {
+                        throw new BeanBagNotInStockException();
+                    }
+                    // If there is enough stock available, update the sold array and update the quantity of stock that is
+                    // left.
+                    else if (stockItem.getNum() - stockItem.getReserved() - num > 0) {
+                        if (stockItem.getPrice() != 0) {
+                            if (sold.size() > 0) {
+                                for (int j = 0; j < sold.size(); j++) {
+                                    Beanbag soldItem = ((Beanbag) sold.get(i));
+                                    if (soldItem.getId() == stockItem.getId()) {
+                                        soldItem.setNum(soldItem.getNum() + stockItem.getNum());
+                                        sold.replace(soldItem, j);
+                                    }
+                                }
+                            } else {
+                                sold.add(stockItem);
                             }
-                            else {
-                                sold.add(soldItem);
-                            }
+                            stockItem.setNum(stockItem.getNum() - num);
+                            stock.replace(stockItem, i);
                         }
-                        stockItem.setNum(stockItem.getNum() - num);
-                        stock.replace(stockItem, i);
+                        // If the price has not been set yet, raise an exception.
+                        else {
+                            throw new PriceNotSetException();
+                        }
                     }
-                    // If the price has not been set yet, raise an exception.
+                    // If stock is greater than zero but not enough to sell, raise an exception.
                     else {
-                        throw new PriceNotSetException();
+                        throw new InsufficientStockException();
                     }
                 }
-                // If stock is greater than zero but not enough to sell, raise an exception.
-                else {
-                    throw new InsufficientStockException();
+                // If the id was not found, raise an exception.
+                else if (i + 1 == stock.size()) {
+                    throw new BeanBagIDNotRecognisedException();
                 }
             }
-            // If the id was not found, raise an exception.
-            else if (i + 1 == stock.size()) {
-                throw new BeanBagIDNotRecognisedException();
-            }
+        }
+        else {
+            throw new BeanBagIDNotRecognisedException();
         }
     }
 
@@ -225,37 +240,42 @@ public class Store implements BeanBagStore {
         }
 
         int reservationNum = 0;
-        // Iterate through stock until the beanbag object with a matching id is found.
-        for (int i = 0; i < stock.size(); i++) {
-            Beanbag stockItem = ((Beanbag) stock.get(i));
-            if (stockItem.getId() == id) {
-                // If the stock is empty, raise an exception.
-                if (stockItem.getNum() == 0) {
-                    throw new BeanBagNotInStockException();
-                }
-                // If there is sufficient unreserved stock and the price has bee set, reserve the
-                // beanbags and create the reservation number to be returned.
-                else if (stockItem.getNum() - stockItem.getReserved() >= num) {
-                    if (stockItem.getPrice() != 0) {
-                        stockItem.setReserved(stockItem.getReserved() + num);
-                        reservationNum = reservations.size() + 1;
-                        Reserve newReservation = new Reserve(reservationNum, id, num);
-                        reservations.add(newReservation);
+        if (stock.size() > 0) {
+            // Iterate through stock until the beanbag object with a matching id is found.
+            for (int i = 0; i < stock.size(); i++) {
+                Beanbag stockItem = ((Beanbag) stock.get(i));
+                if (stockItem.getId() == id) {
+                    // If the stock is empty, raise an exception.
+                    if (stockItem.getNum() == 0) {
+                        throw new BeanBagNotInStockException();
                     }
-                    // If the price has not been set yet, raise an exception.
+                    // If there is sufficient unreserved stock and the price has bee set, reserve the
+                    // beanbags and create the reservation number to be returned.
+                    else if (stockItem.getNum() - stockItem.getReserved() >= num) {
+                        if (stockItem.getPrice() != 0) {
+                            stockItem.setReserved(stockItem.getReserved() + num);
+                            reservationNum = reservations.size() + 1;
+                            Reserve newReservation = new Reserve(reservationNum, id, num);
+                            reservations.add(newReservation);
+                        }
+                        // If the price has not been set yet, raise an exception.
+                        else {
+                            throw new PriceNotSetException();
+                        }
+                    }
+                    // If stock is greater than zero but not enough to reserve, raise an exception.
                     else {
-                        throw new PriceNotSetException();
+                        throw new InsufficientStockException();
                     }
                 }
-                // If stock is greater than zero but not enough to reserve, raise an exception.
-                else {
-                    throw new InsufficientStockException();
+                // If the id was not found, raise an exception.
+                else if (i + 1 == stock.size()) {
+                    throw new BeanBagIDNotRecognisedException();
                 }
             }
-            // If the id was not found, raise an exception.
-            else if (i + 1 == stock.size()) {
-                throw new BeanBagIDNotRecognisedException();
-            }
+        }
+        else {
+            throw new BeanBagIDNotRecognisedException();
         }
         return reservationNum;
     }
@@ -265,25 +285,30 @@ public class Store implements BeanBagStore {
             throws ReservationNumberNotRecognisedException
     {
         // Iterate through reservations until the reservation object with a matching reservation number is found.
-        for (int i = 0; i < reservations.size(); i++) {
-            Reserve reservation = ((Reserve) reservations.get(i));
-            // If the reservation is found, loop through the stock to find the stock with the matching id to the
-            // reservation. If found, correct the number of beanbags reserved and remove the reservation from the
-            // array of reservations. Finally, break from the find reservation loop.
-            if (reservation.getReservationNum() == reservationNumber) {
-                for (int j = 0; j < stock.size(); j++) {
-                    Beanbag stockItem = ((Beanbag) stock.get(j));
-                    if (stockItem.getId() == reservation.getId()) {
-                        stockItem.setReserved(stockItem.getReserved() - reservation.getNum());
-                        reservations.remove(i);
-                        break;
+        if (reservations.size() > 0) {
+            for (int i = 0; i < reservations.size(); i++) {
+                Reserve reservation = ((Reserve) reservations.get(i));
+                // If the reservation is found, loop through the stock to find the stock with the matching id to the
+                // reservation. If found, correct the number of beanbags reserved and remove the reservation from the
+                // array of reservations. Finally, break from the find reservation loop.
+                if (reservation.getReservationNum() == reservationNumber) {
+                    for (int j = 0; j < stock.size(); j++) {
+                        Beanbag stockItem = ((Beanbag) stock.get(j));
+                        if (stockItem.getId() == reservation.getId()) {
+                            stockItem.setReserved(stockItem.getReserved() - reservation.getNum());
+                            reservations.remove(i);
+                            break;
+                        }
                     }
                 }
+                // If the reservation number was not found, raise an exception.
+                else if (i + 1 == reservations.size()) {
+                    throw new ReservationNumberNotRecognisedException();
+                }
             }
-            // If the reservation number was not found, raise an exception.
-            else if (i + 1 == reservations.size()) {
-                throw new ReservationNumberNotRecognisedException();
-            }
+        }
+        else {
+            throw new ReservationNumberNotRecognisedException();
         }
     }
 
@@ -292,37 +317,43 @@ public class Store implements BeanBagStore {
             throws ReservationNumberNotRecognisedException
     {
         // Iterate through reservations until the reservation object with a matching reservation number is found.
-        for (int i = 0; i < reservations.size(); i++) {
-            Reserve reservation = ((Reserve) reservations.get(i));
-            // If the reservation is found, loop through the stock to find the stock with the matching id to the
-            // reservation.
-            if (reservation.getReservationNum() == reservationNumber) {
-                for (int j = 0; j < stock.size(); j++) {
-                    Beanbag stockItem = ((Beanbag) stock.get(j));
-                    // If found, update the sold array, correct the number of beanbags reserved and remove the
-                    // reservation from the array of reservations. Finally, break from the find reservation loop.
-                    if (stockItem.getId() == reservation.getId()) {
-                        for (int k = 0; k < sold.size(); k++) {
-                            Beanbag soldItem = ((Beanbag) sold.get(i));
-                            if (soldItem.getId() == stockItem.getId()) {
-                                soldItem.setNum(soldItem.getNum() + stockItem.getNum());
-                                sold.replace(soldItem, k);
+        if (reservations.size() > 0) {
+            for (int i = 0; i < reservations.size(); i++) {
+                Reserve reservation = ((Reserve) reservations.get(i));
+                // If the reservation is found, loop through the stock to find the stock with the matching id to the
+                // reservation.
+                if (reservation.getReservationNum() == reservationNumber) {
+                    for (int j = 0; j < stock.size(); j++) {
+                        Beanbag stockItem = ((Beanbag) stock.get(j));
+                        // If found, update the sold array, correct the number of beanbags reserved and remove the
+                        // reservation from the array of reservations. Finally, break from the find reservation loop.
+                        if (stockItem.getId() == reservation.getId()) {
+                            if (sold.size() > 0) {
+                                for (int k = 0; k < sold.size(); k++) {
+                                    Beanbag soldItem = ((Beanbag) sold.get(i));
+                                    if (soldItem.getId() == stockItem.getId()) {
+                                        soldItem.setNum(soldItem.getNum() + stockItem.getNum());
+                                        sold.replace(soldItem, k);
+                                    }
+                                }
+                            } else {
+                                sold.add(stockItem);
                             }
-                            else {
-                                sold.add(soldItem);
-                            }
+                            stockItem.setReserved(stockItem.getReserved() - reservation.getNum());
+                            reservations.remove(i);
+                            sold.add(stockItem);
+                            break;
                         }
-                        stockItem.setReserved(stockItem.getReserved() - reservation.getNum());
-                        reservations.remove(i);
-                        sold.add(stockItem);
-                        break;
                     }
                 }
+                // If the reservation number was not found, raise an exception.
+                else if (i + 1 == reservations.size()) {
+                    throw new ReservationNumberNotRecognisedException();
+                }
             }
-            // If the reservation number was not found, raise an exception.
-            else if (i + 1 == reservations.size()) {
-                throw new ReservationNumberNotRecognisedException();
-            }
+        }
+        else {
+            throw new ReservationNumberNotRecognisedException();
         }
     }
 
@@ -361,17 +392,22 @@ public class Store implements BeanBagStore {
         }
 
         int totalStockMatchingID = 0;
-        // Iterate through stock until the beanbag object with a matching id is found.
-        for (int i = 0; i < stock.size(); i++) {
-            Beanbag stockItem = ((Beanbag) stock.get(i));
-            // If found, add the total number of beanbags that stock contains to 'totalStockMatchingID'.
-            if (stockItem.getId() == id) {
-                totalStockMatchingID += stockItem.getNum();
+        if (stock.size() > 0) {
+            // Iterate through stock until the beanbag object with a matching id is found.
+            for (int i = 0; i < stock.size(); i++) {
+                Beanbag stockItem = ((Beanbag) stock.get(i));
+                // If found, add the total number of beanbags that stock contains to 'totalStockMatchingID'.
+                if (stockItem.getId() == id) {
+                    totalStockMatchingID += stockItem.getNum();
+                }
+                // If the id was not found, raise an exception.
+                else if (i + 1 == stock.size()) {
+                    throw new BeanBagIDNotRecognisedException();
+                }
             }
-            // If the id was not found, raise an exception.
-            else if (i + 1 == stock.size()) {
-                throw new BeanBagIDNotRecognisedException();
-            }
+        }
+        else {
+            throw new BeanBagIDNotRecognisedException();
         }
         return totalStockMatchingID;
     }
@@ -384,9 +420,10 @@ public class Store implements BeanBagStore {
         FileOutputStream textFile = new FileOutputStream(new File(fileName));
         ObjectOutputStream object = new ObjectOutputStream(textFile);
 
-        //stock and reservations are both objects created from ObjectArrayList.
+        // Write the objects stock, reservations and sold to the file.
         object.writeObject(stock);
         object.writeObject(reservations);
+        object.writeObject(sold);
         object.close();
         textFile.close();
 
@@ -403,8 +440,11 @@ public class Store implements BeanBagStore {
 
             ObjectArrayList stock = (ObjectArrayList) oi.readObject();
             ObjectArrayList reservations = (ObjectArrayList) oi.readObject();
+            ObjectArrayList sold = (ObjectArrayList) oi.readObject();
+
             setStock(stock);
             setReservations(reservations);
+            setSold(sold);
         }
         catch(IOException e) {
             throw new IOException();
@@ -434,7 +474,7 @@ public class Store implements BeanBagStore {
         int totalSold = 0;
         // Iterate through the entire sold array adding the number of beanbags in each sold object to 'totalSold'.
         for (int i = 0; i < sold.size(); i++) {
-            Beanbag stockItem = ((Beanbag) stock.get(i));
+            Beanbag stockItem = ((Beanbag) sold.get(i));
             totalSold += stockItem.getNum();
         }
         return totalSold;
@@ -444,52 +484,167 @@ public class Store implements BeanBagStore {
     public int getNumberOfSoldBeanBags(String id)
             throws BeanBagIDNotRecognisedException, IllegalIDException
     {
-        return 0;
+        // Check exception.
+        if (checkIllegalIDException(id)) {
+            throw new IllegalIDException();
+        }
+
+        int totalSold = 0;
+        if (sold.size() > 0) {
+            // Iterate through the entire sold array adding the number of beanbags if the ID matches to 'totalSold'.
+            for (int i = 0; i < sold.size(); i++) {
+                Beanbag stockItem = ((Beanbag) sold.get(i));
+                if (stockItem.getId() == id) {
+                    totalSold += stockItem.getNum();
+                }
+                // If the id was not found, raise an exception.
+                else if (i + 1 == sold.size()) {
+                    throw new BeanBagIDNotRecognisedException();
+                }
+            }
+        }
+        else {
+            throw new BeanBagIDNotRecognisedException();
+        }
+        return totalSold;
     }
 
 
     public int getTotalPriceOfSoldBeanBags()
     {
-        return 0;
+        int totalPrice = 0;
+        // Iterate through the entire sold array adding the number of beanbags multiplied by the price of that beanbag
+        // in each sold object to 'totalSold'.
+        for (int i = 0; i < sold.size(); i++) {
+            Beanbag stockItem = ((Beanbag) sold.get(i));
+            totalPrice += stockItem.getNum() * stockItem.getPrice();
+        }
+        return totalPrice;
     }
 
 
     public int getTotalPriceOfSoldBeanBags(String id)
             throws BeanBagIDNotRecognisedException, IllegalIDException
     {
-        return 0;
+        // Check exception.
+        if (checkIllegalIDException(id)) {
+            throw new IllegalIDException();
+        }
+
+        int totalPrice = 0;
+        // Iterate through the entire sold array adding the number of beanbags multiplied by the price of that beanbag
+        // if the ID matches to 'totalSold'.
+        if (sold.size() > 0) {
+            for (int i = 0; i < sold.size(); i++) {
+                Beanbag stockItem = ((Beanbag) sold.get(i));
+                if (stockItem.getId() == id) {
+                    totalPrice += stockItem.getNum() * stockItem.getPrice();
+                }
+                // If the id was not found, raise an exception.
+                else if (i + 1 == sold.size()) {
+                    throw new BeanBagIDNotRecognisedException();
+                }
+            }
+        }
+        else {
+            throw new BeanBagIDNotRecognisedException();
+        }
+        return totalPrice;
     }
 
 
     public int getTotalPriceOfReservedBeanBags()
     {
-        return 0;
+        int totalPrice = 0;
+        // Iterate through the entire stock array adding the number of beanbags that are reserved multiplied by the
+        // price of that beanbag in each sold object to 'totalSold'.
+        for (int i = 0; i < stock.size(); i++) {
+            Beanbag stockItem = ((Beanbag) stock.get(i));
+            totalPrice += stockItem.getReserved() * stockItem.getPrice();
+        }
+        return totalPrice;
     }
 
 
     public String getBeanBagDetails(String id)
             throws BeanBagIDNotRecognisedException, IllegalIDException
     {
-        return "";
+        // Check exception.
+        if (checkIllegalIDException(id)) {
+            throw new IllegalIDException();
+        }
+
+        String BeanBagDetails = "";
+        // Iterate through the entire stock array assinging the free text detail of the beanbag object with a matching
+        // ID.
+        if (sold.size() > 0) {
+            for (int i = 0; i < sold.size(); i++) {
+                Beanbag stockItem = ((Beanbag) sold.get(i));
+                if (stockItem.getId() == id) {
+                    BeanBagDetails = stockItem.getInformation();
+                }
+                // If the id was not found, raise an exception.
+                else if (i + 1 == sold.size()) {
+                    throw new BeanBagIDNotRecognisedException();
+                }
+            }
+        }
+        else {
+            throw new BeanBagIDNotRecognisedException();
+        }
+        return BeanBagDetails;
     }
 
 
     public void empty()
     {
-
+        setStock(new ObjectArrayList());
+        setReservations(new ObjectArrayList());
+        setSold(new ObjectArrayList());
     }
 
 
     public void resetSaleAndCostTracking()
     {
-
+        setSold(new ObjectArrayList());
     }
 
 
     public void replace(String oldId, String replacementId)
             throws BeanBagIDNotRecognisedException, IllegalIDException
     {
+        // Check exception for both input ID's.
+        if (checkIllegalIDException(oldId) || checkIllegalIDException(replacementId)) {
+            throw new IllegalIDException();
+        }
 
+        // Iterate through the entire stock array to find the beanbag object with id 'oldId', use the set method to
+        // change the id of the beanbag object to the new id and replace that beanbag object in the stock array with
+        // the updated object.
+        for (int i = 0; i < stock.size(); i++) {
+            Beanbag stockItem = ((Beanbag) stock.get(i));
+            if (stockItem.getId() == oldId) {
+                stockItem.setId(replacementId);
+                stock.replace(stockItem, i);
+            }
+            // If the id was not found, raise an exception.
+            else if (i + 1 == stock.size()) {
+                throw new BeanBagIDNotRecognisedException();
+            }
+        }
+
+        // Same as above but for reservations.
+        for (int i = 0; i < reservations.size(); i++) {
+            Beanbag stockItem = ((Beanbag) reservations.get(i));
+            if (stockItem.getId() == oldId) {
+                stockItem.setId(replacementId);
+                reservations.replace(stockItem, i);
+            }
+            // If the id was not found, raise an exception.
+            else if (i + 1 == reservations.size()) {
+                throw new BeanBagIDNotRecognisedException();
+            }
+        }
     }
 
 }
