@@ -14,6 +14,7 @@ public class Beanbag implements Serializable
     private int reserved;
 
     public void setPrice(int price){
+        assert price >= 0 : "Price must be greater or equal to zero";
         this.price = price;
     }
 

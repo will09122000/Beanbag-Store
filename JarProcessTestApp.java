@@ -38,11 +38,20 @@ public class JarProcessTestApp {
         store.reserveBeanBags(4, "12345678");
         store.unreserveBeanBags(1);
 
-        //store.saveStoreContents("text_file");
-        //store.loadStoreContents("text_file");
+        /*
+        ObjectArrayList stock = ((ObjectArrayList) store.getStock());
+        Beanbag stockItem = ((Beanbag) stock.get(0));
+        System.out.println(stockItem.getInformation());
 
-        store.getNumberOfDifferentBeanBagsInStock();
         System.out.println(store.getBeanBagDetails("12345678"));
+
+        store.saveStoreContents("text_file");
+        store.empty();
+        store.loadStoreContents("text_file");
+
+        System.out.println(store.getBeanBagDetails("12345678"));
+        */
+
 
     }
 }
