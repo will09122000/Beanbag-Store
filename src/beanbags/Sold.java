@@ -1,7 +1,7 @@
 package beanbags;
 import java.io.Serializable;
 
-public class Beanbag implements Serializable
+public class Sold implements Serializable
 {
     private int num;
     private String manufacturer;
@@ -11,7 +11,6 @@ public class Beanbag implements Serializable
     private byte month;
     private String information;
     private int price;
-    private int reserved;
 
     public void setPrice(int price){
         assert price >= 0 : "Price must be greater than or equal to zero.";
@@ -23,15 +22,6 @@ public class Beanbag implements Serializable
         this.num = num;
     }
 
-    public void setId(String id){
-        assert id.matches("^[0-9a-fA-F]+$") && id.length() == 8 : "ID must be an 8 digit hexadecimal number.";
-        this.id = id;
-    }
-
-    public void setReserved(int reserved){
-        assert reserved >= 0 : "Number of beanbags reserved must be greater than or equal to zero.";
-        this.reserved = reserved;
-    }
 
     public int getNum(){
         return num;
@@ -65,11 +55,8 @@ public class Beanbag implements Serializable
         return price;
     }
 
-    public int getReserved(){
-        return reserved;
-    }
 
-    public Beanbag(int num, String manufacturer, String name, String id, short year, byte month) {
+    public Sold(int num, String manufacturer, String name, String id, short year, byte month) {
         assert num >= 0 : "Number of beanbags must be greater than or equal to zero.";
         assert id.matches("^[0-9a-fA-F]+$") && id.length() == 8 : "ID must be an 8 digit hexadecimal number.";
         assert year > 0 : "Year must be greater than zero.";
@@ -82,9 +69,9 @@ public class Beanbag implements Serializable
         this.id = id;
         this.year = year;
         this.month = month;
-     }
+    }
 
-    public Beanbag(int num, String manufacturer, String name, String id, short year, byte month, String information) {
+    public Sold(int num, String manufacturer, String name, String id, short year, byte month, String information) {
         assert num >= 0 : "Number of beanbags must be greater than or equal to zero.";
         assert id.matches("^[0-9a-fA-F]+$") && id.length() == 8 : "ID must be an 8 digit hexadecimal number.";
         assert year > 0 : "Year must be greater than zero.";

@@ -1,9 +1,6 @@
 package beanbags;
 import java.io.IOException;
 
-import java.io.Serializable;
-import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.ObjectInputStream;
@@ -15,9 +12,6 @@ public class Store implements BeanBagStore {
     private ObjectArrayList reservations = new ObjectArrayList();
     private ObjectArrayList sold = new ObjectArrayList();
 
-    public ObjectArrayList getStock(){
-        return stock;
-    }
 
     public void setStock(ObjectArrayList stock){
         this.stock = stock;
@@ -30,7 +24,6 @@ public class Store implements BeanBagStore {
     public void setSold(ObjectArrayList sold){
         this.sold = sold;
     }
-
 
     public boolean checkValidQuantityException(int number) {
         // Used for multiple exception checks as they all check the same thing just the meaning of the
@@ -64,6 +57,7 @@ public class Store implements BeanBagStore {
     }
 
     public boolean checkIllegalIDException(String id) {
+        // Checks the ID contains characters A-F and 0-0 only and checks the length is equal to 8.
         if (id.matches("^[0-9a-fA-F]+$") && id.length() == 8) {
             return false;
         } else {
@@ -72,6 +66,7 @@ public class Store implements BeanBagStore {
     }
 
     public boolean checkInvalidMonthException(byte month) {
+        // Checks the month is between 1 and 12.
         int monthCheck = month;
         if (monthCheck >= 1 && monthCheck <= 12) {
             return false;
@@ -79,7 +74,6 @@ public class Store implements BeanBagStore {
             return true;
         }
     }
-
 
     public void addBeanBags(int num, String manufacturer, String name,
     String id, short year, byte month)
@@ -103,11 +97,12 @@ public class Store implements BeanBagStore {
             throw new InvalidMonthException();
         }
 
-        assert year > 0 : "Year is less than zero.";
+        assert year > 0 : "Year must be greater than zero.";
         // If no exceptions thrown, add beanbag object to stock array.
+        int stockSize = stock.size();
         stock.add(beanbag);
+        assert stockSize + 1 == stock.size() : "Stock size has not increased by one";
     }
-
 
     public void addBeanBags(int num, String manufacturer, String name, 
     String id, short year, byte month, String information)
@@ -131,11 +126,12 @@ public class Store implements BeanBagStore {
             throw new InvalidMonthException();
         }
 
-        assert year > 0 : "Year is less than zero.";
+        assert year > 0 : "Year must be greater than zero.";
         // If no exceptions thrown, add beanbag object to stock array.
+        int stockSize = stock.size();
         stock.add(beanbag);
+        assert stockSize + 1 == stock.size() : "Stock size has not increased by one.";
      }
-
 
     public void setBeanBagPrice(String id, int priceInPence)
             throws InvalidPriceException, BeanBagIDNotRecognisedException, IllegalIDException
@@ -154,21 +150,26 @@ public class Store implements BeanBagStore {
                 Beanbag stockItem = ((Beanbag) stock.get(i));
                 if (stockItem.getId().equals(id)) {
                     stockItem.setPrice(priceInPence);
+                    for (int j = 0; j < reservations.size(); j++) {
+                        Reserve reservation = ((Reserve) reservations.get(j));
+                        if (reservation.getId().equals(id)) {
+                            if (reservation.getPrice() > priceInPence)
+                                reservation.setPrice(priceInPence);
+                        }
+                    }
+                    break;
                 }
                 // If the id was not found, raise an exception.
                 else if (i + 1 == stock.size()) {
                     throw new BeanBagIDNotRecognisedException();
                 }
-                // Replace beanbag object with the update version including the price attribute.
-                stock.replace(stockItem, i);
             }
         }
-        // If not stock present, raise this exception.
+        // If no stock present, raise an exception.
         else {
             throw new BeanBagIDNotRecognisedException();
         }
     }
-
 
     public void sellBeanBags(int num, String id)
             throws BeanBagNotInStockException, InsufficientStockException,
@@ -194,21 +195,30 @@ public class Store implements BeanBagStore {
                     }
                     // If there is enough stock available, update the sold array and update the quantity of stock that is
                     // left.
-                    else if (stockItem.getNum() - stockItem.getReserved() - num > 0) {
+                    else if (stockItem.getNum() - stockItem.getReserved() - num >= 0) {
                         if (stockItem.getPrice() != 0) {
                             if (sold.size() > 0) {
                                 for (int j = 0; j < sold.size(); j++) {
-                                    Beanbag soldItem = ((Beanbag) sold.get(i));
+                                    Sold soldItem = ((Sold) sold.get(j));
                                     if (soldItem.getId().equals(stockItem.getId())) {
-                                        soldItem.setNum(soldItem.getNum() + stockItem.getNum());
-                                        sold.replace(soldItem, j);
+                                        soldItem.setNum(soldItem.getNum() + num);
+                                    }
+                                    else if (i + 1 == sold.size()) {
+                                        int soldSize = sold.size();
+                                        Sold newSold = new Sold(num, stockItem.getManufacturer(), stockItem.getName(), id, stockItem.getYear(), stockItem.getMonth(), stockItem.getInformation());
+                                        newSold.setPrice(stockItem.getPrice());
+                                        sold.add(newSold);
+                                        assert soldSize + 1 == sold.size() : "Sold size has not increased by one.";
                                     }
                                 }
                             } else {
-                                sold.add(stockItem);
+                                int soldSize = sold.size();
+                                Sold newSold = new Sold(num, stockItem.getManufacturer(), stockItem.getName(), id, stockItem.getYear(), stockItem.getMonth(), stockItem.getInformation());
+                                newSold.setPrice(stockItem.getPrice());
+                                sold.add(newSold);
+                                assert soldSize + 1 == sold.size() : "Sold size has not increased by one.";
                             }
                             stockItem.setNum(stockItem.getNum() - num);
-                            stock.replace(stockItem, i);
                         }
                         // If the price has not been set yet, raise an exception.
                         else {
@@ -219,6 +229,7 @@ public class Store implements BeanBagStore {
                     else {
                         throw new InsufficientStockException();
                     }
+                    break;
                 }
                 // If the id was not found, raise an exception.
                 else if (i + 1 == stock.size()) {
@@ -226,12 +237,11 @@ public class Store implements BeanBagStore {
                 }
             }
         }
-        // If not stock present, raise this exception.
+        // If no stock present, raise an exception.
         else {
             throw new BeanBagIDNotRecognisedException();
         }
     }
-
 
     public int reserveBeanBags(int num, String id)
             throws BeanBagNotInStockException, InsufficientStockException,
@@ -262,8 +272,12 @@ public class Store implements BeanBagStore {
                         if (stockItem.getPrice() != 0) {
                             stockItem.setReserved(stockItem.getReserved() + num);
                             reservationNum = reservations.size() + 1;
-                            Reserve newReservation = new Reserve(reservationNum, id, num);
+                            int price = stockItem.getPrice();
+                            Reserve newReservation = new Reserve(reservationNum, id, num, price);
+
+                            int reservationsSize = reservations.size();
                             reservations.add(newReservation);
+                            assert reservationsSize + 1 == reservations.size() : "Reservations size has not increased by one.";
                         }
                         // If the price has not been set yet, raise an exception.
                         else {
@@ -274,6 +288,7 @@ public class Store implements BeanBagStore {
                     else {
                         throw new InsufficientStockException();
                     }
+                    break;
                 }
                 // If the id was not found, raise an exception.
                 else if (i + 1 == stock.size()) {
@@ -281,13 +296,12 @@ public class Store implements BeanBagStore {
                 }
             }
         }
-        // If not stock present, raise this exception.
+        // If no stock present, raise an exception.
         else {
             throw new BeanBagIDNotRecognisedException();
         }
         return reservationNum;
     }
-
 
     public void unreserveBeanBags(int reservationNumber)
             throws ReservationNumberNotRecognisedException
@@ -304,7 +318,10 @@ public class Store implements BeanBagStore {
                         Beanbag stockItem = ((Beanbag) stock.get(j));
                         if (stockItem.getId() == reservation.getId()) {
                             stockItem.setReserved(stockItem.getReserved() - reservation.getNum());
+
+                            int reservationsSize = reservations.size();
                             reservations.remove(i);
+                            assert reservationsSize - 1 == reservations.size() : "Reservations size has not decreased by one.";
                             break;
                         }
                     }
@@ -315,11 +332,11 @@ public class Store implements BeanBagStore {
                 }
             }
         }
+        // If reservation number not found, raise an exception.
         else {
             throw new ReservationNumberNotRecognisedException();
         }
     }
-
 
     public void sellBeanBags(int reservationNumber)
             throws ReservationNumberNotRecognisedException
@@ -338,21 +355,32 @@ public class Store implements BeanBagStore {
                         if (stockItem.getId().equals(reservation.getId())) {
                             if (sold.size() > 0) {
                                 for (int k = 0; k < sold.size(); k++) {
-                                    Beanbag soldItem = ((Beanbag) sold.get(i));
+                                    Sold soldItem = ((Sold) sold.get(k));
                                     if (soldItem.getId().equals(stockItem.getId())) {
-                                        soldItem.setNum(soldItem.getNum() + stockItem.getNum());
-                                        sold.replace(soldItem, k);
+                                        soldItem.setNum(soldItem.getNum() + reservation.getNum());
+                                    }
+                                    else if (i + 1 == sold.size()) {
+                                        int soldSize = sold.size();
+                                        Sold newSold = new Sold(reservation.getNum(), stockItem.getManufacturer(), stockItem.getName(), stockItem.getId(), stockItem.getYear(), stockItem.getMonth(), stockItem.getInformation());
+                                        newSold.setPrice(stockItem.getPrice());
+                                        sold.add(newSold);
+                                        assert soldSize + 1 == sold.size() : "Sold size has not increased by one.";
                                     }
                                 }
                             } else {
-                                sold.add(stockItem);
+                                int soldSize = sold.size();
+                                Sold newSold = new Sold(reservation.getNum(), stockItem.getManufacturer(), stockItem.getName(), stockItem.getId(), stockItem.getYear(), stockItem.getMonth(), stockItem.getInformation());
+                                newSold.setPrice(stockItem.getPrice());
+                                sold.add(newSold);
+                                assert soldSize + 1 == sold.size() : "Sold size has not increased by one.";
                             }
                             stockItem.setReserved(stockItem.getReserved() - reservation.getNum());
+                            stockItem.setNum(stockItem.getNum() - reservation.getNum());
                             reservations.remove(i);
-                            sold.add(stockItem);
                             break;
                         }
                     }
+                    break;
                 }
                 // If the reservation number was not found, raise an exception.
                 else if (i + 1 == reservations.size()) {
@@ -360,11 +388,11 @@ public class Store implements BeanBagStore {
                 }
             }
         }
+        // If reservation number not found, raise an exception.
         else {
             throw new ReservationNumberNotRecognisedException();
         }
     }
-
 
     public int beanBagsInStock()
     {
@@ -378,7 +406,6 @@ public class Store implements BeanBagStore {
         return totalStock;
     }
 
-
     public int reservedBeanBagsInStock()
     {
         int totalReservedStock = 0;
@@ -391,7 +418,6 @@ public class Store implements BeanBagStore {
         assert totalReservedStock >= 0 : "Total reserved stock is less than zero." ;
         return totalReservedStock;
     }
-
 
     public int beanBagsInStock(String id)
             throws BeanBagIDNotRecognisedException, IllegalIDException
@@ -409,6 +435,7 @@ public class Store implements BeanBagStore {
                 // If found, add the total number of beanbags that stock contains to 'totalStockMatchingID'.
                 if (stockItem.getId().equals(id)) {
                     totalStockMatchingID += stockItem.getNum();
+                    break;
                 }
                 // If the id was not found, raise an exception.
                 else if (i + 1 == stock.size()) {
@@ -416,13 +443,13 @@ public class Store implements BeanBagStore {
                 }
             }
         }
+        // If the id was not found, raise an exception.
         else {
             throw new BeanBagIDNotRecognisedException();
         }
         assert totalStockMatchingID >= 0 : "Total stock with matching ID is less than zero.";
         return totalStockMatchingID;
     }
-
 
     public void saveStoreContents(String filename)
             throws IOException
@@ -439,7 +466,6 @@ public class Store implements BeanBagStore {
             throw new IOException();
         }
     }
-
 
     public void loadStoreContents(String filename)
             throws IOException, ClassNotFoundException
@@ -477,7 +503,6 @@ public class Store implements BeanBagStore {
         }
     }
 
-
     public int getNumberOfDifferentBeanBagsInStock()
     {
         int totalDiffStock = 0;
@@ -492,19 +517,17 @@ public class Store implements BeanBagStore {
         return totalDiffStock;
     }
 
-
     public int getNumberOfSoldBeanBags()
     {
         int totalSold = 0;
         // Iterate through the entire sold array adding the number of beanbags in each sold object to 'totalSold'.
         for (int i = 0; i < sold.size(); i++) {
-            Beanbag stockItem = ((Beanbag) sold.get(i));
+            Sold stockItem = ((Sold) sold.get(i));
             totalSold += stockItem.getNum();
         }
         assert totalSold >= 0 : "Total number of sold beanbags is less than zero.";
         return totalSold;
     }
-
 
     public int getNumberOfSoldBeanBags(String id)
             throws BeanBagIDNotRecognisedException, IllegalIDException
@@ -518,9 +541,10 @@ public class Store implements BeanBagStore {
         if (sold.size() > 0) {
             // Iterate through the entire sold array adding the number of beanbags if the ID matches to 'totalSold'.
             for (int i = 0; i < sold.size(); i++) {
-                Beanbag stockItem = ((Beanbag) sold.get(i));
+                Sold stockItem = ((Sold) sold.get(i));
                 if (stockItem.getId().equals(id)) {
                     totalSold += stockItem.getNum();
+                    break;
                 }
                 // If the id was not found, raise an exception.
                 else if (i + 1 == sold.size()) {
@@ -528,6 +552,7 @@ public class Store implements BeanBagStore {
                 }
             }
         }
+        // If the id was not found, raise an exception.
         else {
             throw new BeanBagIDNotRecognisedException();
         }
@@ -535,20 +560,20 @@ public class Store implements BeanBagStore {
         return totalSold;
     }
 
-
     public int getTotalPriceOfSoldBeanBags()
     {
         int totalPrice = 0;
         // Iterate through the entire sold array adding the number of beanbags multiplied by the price of that beanbag
         // in each sold object to 'totalSold'.
         for (int i = 0; i < sold.size(); i++) {
-            Beanbag stockItem = ((Beanbag) sold.get(i));
-            totalPrice += stockItem.getNum() * stockItem.getPrice();
+            Sold soldItem = ((Sold) sold.get(i));
+            //System.out.println(soldItem.getNum());
+            //System.out.println(soldItem.getPrice());
+            totalPrice += soldItem.getNum() * soldItem.getPrice();
         }
         assert totalPrice >= 0 : "Total price of sold beanbags is less than zero.";
         return totalPrice;
     }
-
 
     public int getTotalPriceOfSoldBeanBags(String id)
             throws BeanBagIDNotRecognisedException, IllegalIDException
@@ -563,9 +588,10 @@ public class Store implements BeanBagStore {
         // if the ID matches to 'totalSold'.
         if (sold.size() > 0) {
             for (int i = 0; i < sold.size(); i++) {
-                Beanbag stockItem = ((Beanbag) sold.get(i));
-                if (stockItem.getId().equals(id)) {
-                    totalPrice += stockItem.getNum() * stockItem.getPrice();
+                Sold soldItem = ((Sold) sold.get(i));
+                if (soldItem.getId().equals(id)) {
+                    totalPrice += soldItem.getNum() * soldItem.getPrice();
+                    break;
                 }
                 // If the id was not found, raise an exception.
                 else if (i + 1 == sold.size()) {
@@ -573,13 +599,13 @@ public class Store implements BeanBagStore {
                 }
             }
         }
+        // If the id was not found, raise an exception.
         else {
             throw new BeanBagIDNotRecognisedException();
         }
         assert totalPrice >= 0 : "Total price of sold beanbags with matching ID is less than zero.";
         return totalPrice;
     }
-
 
     public int getTotalPriceOfReservedBeanBags()
     {
@@ -593,7 +619,6 @@ public class Store implements BeanBagStore {
         assert totalPrice >= 0 : "Total price of reserved beanbags is less than zero.";
         return totalPrice;
     }
-
 
     public String getBeanBagDetails(String id)
             throws BeanBagIDNotRecognisedException, IllegalIDException
@@ -611,6 +636,7 @@ public class Store implements BeanBagStore {
                 Beanbag stockItem = ((Beanbag) stock.get(i));
                 if (stockItem.getId().equals(id)) {
                     BeanBagDetails = stockItem.getInformation();
+                    break;
                 }
                 // If the id was not found, raise an exception.
                 else if (i + 1 == stock.size()) {
@@ -618,12 +644,12 @@ public class Store implements BeanBagStore {
                 }
             }
         }
+        // If the id was not found, raise an exception.
         else {
             throw new BeanBagIDNotRecognisedException();
         }
         return BeanBagDetails;
     }
-
 
     public void empty()
     {
@@ -632,12 +658,10 @@ public class Store implements BeanBagStore {
         setSold(new ObjectArrayList());
     }
 
-
     public void resetSaleAndCostTracking()
     {
         setSold(new ObjectArrayList());
     }
-
 
     public void replace(String oldId, String replacementId)
             throws BeanBagIDNotRecognisedException, IllegalIDException
@@ -654,7 +678,7 @@ public class Store implements BeanBagStore {
             Beanbag stockItem = ((Beanbag) stock.get(i));
             if (stockItem.getId().equals(oldId)) {
                 stockItem.setId(replacementId);
-                stock.replace(stockItem, i);
+                break;
             }
             // If the id was not found, raise an exception.
             else if (i + 1 == stock.size()) {
@@ -664,14 +688,9 @@ public class Store implements BeanBagStore {
 
         // Same as above but for reservations.
         for (int i = 0; i < reservations.size(); i++) {
-            Beanbag stockItem = ((Beanbag) reservations.get(i));
+            Reserve stockItem = ((Reserve) reservations.get(i));
             if (stockItem.getId().equals(oldId)) {
                 stockItem.setId(replacementId);
-                reservations.replace(stockItem, i);
-            }
-            // If the id was not found, raise an exception.
-            else if (i + 1 == reservations.size()) {
-                throw new BeanBagIDNotRecognisedException();
             }
         }
     }
