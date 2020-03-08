@@ -8,6 +8,7 @@ public class Reserve implements Serializable
     private int num;
     private int price;
 
+    // Setters
 
     public void setId(String id){
         assert id.matches("^[0-9a-fA-F]+$") && id.length() == 8 : "ID must be an 8 digit hexadecimal number.";
@@ -24,6 +25,7 @@ public class Reserve implements Serializable
         this.price = price;
     }
 
+    // Getters
 
     public int getReservationNum(){
         return reservationNum;
@@ -40,6 +42,8 @@ public class Reserve implements Serializable
     public int getPrice(){
         return price;
     }
+
+    // Constructors
 
     public Reserve(int reservationNum, String id, int num, int price) {
         assert reservationNum >= 0 : "Reservation number must be greater than or equal to zero.";

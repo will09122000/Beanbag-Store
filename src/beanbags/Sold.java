@@ -12,6 +12,8 @@ public class Sold implements Serializable
     private String information;
     private int price;
 
+    // Setters
+
     public void setPrice(int price){
         assert price >= 0 : "Price must be greater than or equal to zero.";
         this.price = price;
@@ -22,6 +24,7 @@ public class Sold implements Serializable
         this.num = num;
     }
 
+    // Getters
 
     public int getNum(){
         return num;
@@ -55,6 +58,7 @@ public class Sold implements Serializable
         return price;
     }
 
+    // Constructors
 
     public Sold(int num, String manufacturer, String name, String id, short year, byte month) {
         assert num >= 0 : "Number of beanbags must be greater than or equal to zero.";

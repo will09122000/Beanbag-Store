@@ -13,6 +13,8 @@ public class Beanbag implements Serializable
     private int price;
     private int reserved;
 
+    // Setters
+
     public void setPrice(int price){
         assert price >= 0 : "Price must be greater than or equal to zero.";
         this.price = price;
@@ -32,6 +34,8 @@ public class Beanbag implements Serializable
         assert reserved >= 0 : "Number of beanbags reserved must be greater than or equal to zero.";
         this.reserved = reserved;
     }
+
+    // Getters
 
     public int getNum(){
         return num;
@@ -68,6 +72,8 @@ public class Beanbag implements Serializable
     public int getReserved(){
         return reserved;
     }
+
+    // Constructors
 
     public Beanbag(int num, String manufacturer, String name, String id, short year, byte month) {
         assert num >= 0 : "Number of beanbags must be greater than or equal to zero.";
