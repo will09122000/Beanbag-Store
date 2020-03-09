@@ -3,8 +3,13 @@
   <component name="ChangeListManager">
     <list default="true" id="e95a5c18-ad26-4dfa-9568-ffdd7daf5152" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/beanbags/Beanbag.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Beanbag.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/beanbags/Reserve.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Reserve.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JarProcessTestApp.class" beforeDir="false" afterPath="$PROJECT_DIR$/JarProcessTestApp.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/JarProcessTestApp.java" beforeDir="false" afterPath="$PROJECT_DIR$/JarProcessTestApp.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/beanbags.jar" beforeDir="false" afterPath="$PROJECT_DIR$/beanbags.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Beanbag.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Beanbag.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Reserve.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Reserve.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Sold.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Sold.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/beanbags/Store.class" beforeDir="false" afterPath="$PROJECT_DIR$/bin/beanbags/Store.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/beanbags/Sold.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Sold.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/beanbags/Store.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/beanbags/Store.java" afterDir="false" />
     </list>
@@ -88,7 +93,7 @@
       <workItem from="1582987112427" duration="37108000" />
       <workItem from="1583178358664" duration="17855000" />
       <workItem from="1583664068000" duration="10464000" />
-      <workItem from="1583679050303" duration="11881000" />
+      <workItem from="1583679050303" duration="14404000" />
     </task>
     <task id="LOCAL-00001" summary="Added exceptions">
       <created>1583092036426</created>

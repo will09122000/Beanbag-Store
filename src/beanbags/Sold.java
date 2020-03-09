@@ -30,28 +30,8 @@ public class Sold implements Serializable
         return num;
     }
 
-    public String getManufacturer(){
-        return manufacturer;
-    }
-
-    public String getName(){
-        return name;
-    }
-
     public String getId(){
         return id;
-    }
-
-    public short getYear(){
-        return year;
-    }
-
-    public byte getMonth(){
-        return month;
-    }
-
-    public String getInformation(){
-        return information;
     }
 
     public int getPrice(){

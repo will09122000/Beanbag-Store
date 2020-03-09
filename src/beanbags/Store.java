@@ -43,15 +43,27 @@ public class Store implements BeanBagStore {
         // Iterate through existing stock to check if the id already exists.
         for (int i = 0; i < stock.size(); i++) {
             Beanbag stockItem = ((Beanbag) stock.get(i));
+            // If an exisitng id has either a different manufacturer or name to those of the beanbag
+            // being added, thrown an exception.
             if (stockItem.getId() == id) {
-                // If an exisitng id has no stock but the manufacturer and name match those of the beanbag
-                // being added, thrown an exception.
-                if (stockItem.getNum() == 0) {
-                    if ((stockItem.getManufacturer() == manufacturer) && (stockItem.getName() == name)) {
-                        return true;
-                    }
-                    // If an exisitng id currently has stock, throw an exception.
-                } else {
+                if ((stockItem.getManufacturer() != manufacturer) || (stockItem.getName() != name)) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean checkBeanBagMismatchException(int num, String manufacturer, String name, String information,
+                                                 String id) {
+        // Iterate through existing stock to check if the id already exists.
+        for (int i = 0; i < stock.size(); i++) {
+            Beanbag stockItem = ((Beanbag) stock.get(i));
+            // If an exisitng id has either a different manufacturer, name or information to those of the beanbag
+            // being added, thrown an exception.
+            if (stockItem.getId() == id) {
+                if ((stockItem.getManufacturer() != manufacturer) || (stockItem.getName() != name) ||
+                        (stockItem.getInformation() != information)) {
                     return true;
                 }
             }
@@ -124,10 +136,25 @@ public class Store implements BeanBagStore {
         }
 
         assert year > 0 : "Year must be greater than zero.";
-        // If no exceptions thrown, add beanbag object to stock array.
-        int stockSize = stock.size();
-        stock.add(beanbag);
-        assert stockSize + 1 == stock.size() : "Stock size has not increased by one";
+
+        if (stock.size() > 0) {
+            for (int i = 0; i < stock.size(); i++) {
+                Beanbag stockItem = ((Beanbag) stock.get(i));
+                if (stockItem.getId() == id) {
+                    stockItem.setNum(stockItem.getNum() + num);
+                    break;
+                }
+                // If the id was not found, add the beanbags as a new beanbag object.
+                else if (i + 1 == stock.size()) {
+                    stock.add(beanbag);
+                    break;
+                }
+            }
+        }
+        // If the stock is empty, add the beanbag object.
+        else {
+            stock.add(beanbag);
+        }
     }
 
     /**
@@ -166,7 +193,7 @@ public class Store implements BeanBagStore {
         if (checkValidQuantityException(num)) {
             throw new IllegalNumberOfBeanBagsAddedException();
         }
-        if (checkBeanBagMismatchException(num, manufacturer, name, id)) {
+        if (checkBeanBagMismatchException(num, manufacturer, name, information, id)) {
             throw new BeanBagMismatchException();
         }
         if (checkIllegalIDException(id)) {
@@ -177,10 +204,25 @@ public class Store implements BeanBagStore {
         }
 
         assert year > 0 : "Year must be greater than zero.";
-        // If no exceptions thrown, add beanbag object to stock array.
-        int stockSize = stock.size();
-        stock.add(beanbag);
-        assert stockSize + 1 == stock.size() : "Stock size has not increased by one.";
+
+        if (stock.size() > 0) {
+            for (int i = 0; i < stock.size(); i++) {
+                Beanbag stockItem = ((Beanbag) stock.get(i));
+                if (stockItem.getId() == id) {
+                    stockItem.setNum(stockItem.getNum() + num);
+                    break;
+                }
+                // If the id was not found, add the beanbags as a new beanbag object.
+                else if (i + 1 == stock.size()) {
+                    stock.add(beanbag);
+                    break;
+                }
+            }
+        }
+        // If the stock is empty, add the beanbag object.
+        else {
+            stock.add(beanbag);
+        }
      }
 
     /**
@@ -402,7 +444,8 @@ public class Store implements BeanBagStore {
                             // Add the new reservation object to the reservations array.
                             int reservationsSize = reservations.size();
                             reservations.add(newReservation);
-                            assert reservationsSize + 1 == reservations.size() : "Reservations size has not increased by one.";
+                            assert reservationsSize + 1 == reservations.size() :
+                                    "Reservations size has not increased by one.";
                         }
                         // If the price has not been set yet, raise an exception.
                         else {
@@ -456,7 +499,8 @@ public class Store implements BeanBagStore {
                             stockItem.setReserved(stockItem.getReserved() - reservation.getNum());
                             int reservationsSize = reservations.size();
                             reservations.remove(i);
-                            assert reservationsSize - 1 == reservations.size() : "Reservations size has not decreased by one.";
+                            assert reservationsSize - 1 == reservations.size() :
+                                    "Reservations size has not decreased by one.";
                             break;
                         }
                     }

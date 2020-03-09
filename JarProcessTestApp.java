@@ -27,8 +27,8 @@ public class JarProcessTestApp {
 
         short year = 2020;
         byte month = 01;
-        store.addBeanBags(50, "Will's Beanbag maker", "Comfy beanbag", "12345678", year, month, "INFORAMTTION");
-        store.addBeanBags(60, "Will's Beanbag maker", "Comfy beanbag", "A2345678", year, month);
+        store.addBeanBags(500, "Will's Beanbag maker", "Comfy beanbag", "12345678", year, month, "yeet");
+        store.addBeanBags(1000, "Will's Beanbag maker", "Comfy beanbag", "A2345678", year, month, "yeet");
 
         System.out.println("Store instance successfully made, with "
                 + store.beanBagsInStock()
@@ -36,7 +36,8 @@ public class JarProcessTestApp {
 
         store.setBeanBagPrice("12345678", 1);
         store.setBeanBagPrice("A2345678", 1);
-        /*
+
+
         store.sellBeanBags(5, "12345678");
         store.sellBeanBags(10, "A2345678");
         System.out.println(store.reserveBeanBags(15, "12345678"));
@@ -58,6 +59,6 @@ public class JarProcessTestApp {
         System.out.println(store.getBeanBagDetails("12345678"));
         store.replace("12345678", "87654321");
         System.out.println(store.getBeanBagDetails("87654321"));
-         */
+
     }
 }
